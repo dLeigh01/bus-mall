@@ -3,10 +3,10 @@
 //  ************************** GLOBAL VARIABLES ****************************** //
 let productArray = [];
 let votes = 25;
+let indexNew = [];
 
 // ************************** DOM REFERENCES ******************************** //
-let button = document.getElementById('view-results');
-let showResults = document.getElementById('result-list');
+let chart = document.getElementById('chart');
 let products = document.getElementById('product-display');
 let img1 = document.getElementById('img1');
 let img2 = document.getElementById('img2');
@@ -50,16 +50,22 @@ function randomizeIndex() {
 }
 
 function renderImg() {
-  let index1 = randomizeIndex();
-  let index2 = randomizeIndex();
-  let index3 = randomizeIndex();
+  let index = [];
+  let indexOrigin = 0;
 
-  while(index1 === index2 || index1 === index3) {
-    index1 = randomizeIndex();
+  while(index.length <= 3) {
+    indexOrigin = randomizeIndex();
+    if(!index.includes(indexOrigin) && !indexNew.includes(indexOrigin)) {
+      index.push(indexOrigin);
+    }
   }
-  while(index2 === index1 || index2 === index3) {
-    index2 = randomizeIndex();
-  }
+
+  indexNew = [];
+
+  let index1 = index.pop();
+  let index2 = index.pop();
+  let index3 = index.pop();
+
 
   img1.src = productArray[index1].img;
   img1.alt = productArray[index1].name;
@@ -72,6 +78,8 @@ function renderImg() {
   img3.src = productArray[index3].img;
   img3.alt = productArray[index3].name;
   productArray[index3].views++;
+
+  indexNew.push(index1, index2, index3);
 }
 
 renderImg();
@@ -79,6 +87,57 @@ renderImg();
 Products.prototype.getPercentage = function() {
   this.percentage = (this.clicks / this.views) * 100;
 };
+
+// ************************** CHART ***************************************** //
+function renderChart() {
+  let productName = [];
+  let productClicks = [];
+  let productViews = [];
+
+  for(let i = 0; i < productArray.length; i++) {
+    productName.push(productArray[i].name);
+    productClicks.push(productArray[i].clicks);
+    productViews.push(productArray[i].views);
+  }
+
+  let chartObj = {
+    type: 'bar',
+    data: {
+      labels: productName,
+      datasets: [{
+        label: '# of Votes',
+        data: productClicks,
+        backgroundColor: [
+          'green'
+        ],
+        borderColor: [
+          'black'
+        ],
+        borderWidth: 1
+      },
+      {
+        label: '# of Views',
+        data: productViews,
+        backgroundColor: [
+          'darkgrey'
+        ],
+        borderColor: [
+          'black'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      },
+    }
+  };
+
+  let myChart = new Chart(chart, chartObj);
+}
 
 // ************************** EVENT HANDLERS ******************************** //
 function handleClick(event) {
@@ -92,23 +151,12 @@ function handleClick(event) {
 
   if(votes === 0) {
     products.removeEventListener('click', handleClick);
+    renderChart();
     return;
   }
 
   renderImg();
 }
 
-function handleButton(event) {
-  if(votes === 0) {
-    for(let i = 0; i < productArray.length; i++) {
-      productArray[i].getPercentage();
-      let liElem = document.createElement('li');
-      liElem.textContent = `${productArray[i].name} was viewed ${productArray[i].views} times and clicked on ${productArray[i].clicks} times, meaning it was chosen ${productArray[i].percentage.toFixed(1)}% of the time.`;
-      showResults.appendChild(liElem);
-    }
-  }
-}
-
 // ************************** EVENT LISTENERS ******************************* //
 products.addEventListener('click', handleClick);
-button.addEventListener('click', handleButton);
