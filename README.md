@@ -22,3 +22,13 @@ today's lab wasn't too difficult. I am far closer to getting the hang of grids t
 ### Reflections 02
 
 Chart.js was surprisingly easy to work with, and the minor change I had to make for the double validation took me a little bit, but was easy to implement once I was able to get my head around the method I would need to use.
+
+## Lab 13
+
+### Links and Resources 03
+
+`https://github.com/codefellows/seattle-code-201d84/tree/main/class-13/inclass-demo`
+
+### Reflections 03
+
+With the demo to refer back to, this was really easy to get up and running, but it makes a huge difference to be able to see things persisting between page loads!
