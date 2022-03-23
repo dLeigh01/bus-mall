@@ -5,6 +5,11 @@ let productArray = [];
 let votes = 25;
 let indexNew = [];
 
+// ************************** LOCAL STORAGE RETRIEVAL *********************** //
+let productRetrieval = localStorage.getItem('products');
+productRetrieval = JSON.parse(productRetrieval);
+
+
 // ************************** DOM REFERENCES ******************************** //
 let chart = document.getElementById('chart');
 let products = document.getElementById('product-display');
@@ -19,30 +24,34 @@ function Products(name, fileExtension = 'jpg') {
   this.img = `img/${name}.${fileExtension}`;
   this.views = 0;
   this.clicks = 0;
-  this.percentage = 0;
+  // this.percentage = 0;
 
   productArray.push(this);
 }
 
-new Products('bag');
-new Products('banana');
-new Products('bathroom');
-new Products('boots');
-new Products('breakfast');
-new Products('bubblegum');
-new Products('chair');
-new Products('cthulhu');
-new Products('dog-duck');
-new Products('dragon');
-new Products('pen');
-new Products('pet-sweep');
-new Products('scissors');
-new Products('shark');
-new Products('sweep', 'png');
-new Products('tauntaun');
-new Products('unicorn');
-new Products('water-can');
-new Products('wine-glass');
+if(productRetrieval) {
+  productArray = productRetrieval;
+} else {
+  new Products('bag');
+  new Products('banana');
+  new Products('bathroom');
+  new Products('boots');
+  new Products('breakfast');
+  new Products('bubblegum');
+  new Products('chair');
+  new Products('cthulhu');
+  new Products('dog-duck');
+  new Products('dragon');
+  new Products('pen');
+  new Products('pet-sweep');
+  new Products('scissors');
+  new Products('shark');
+  new Products('sweep', 'png');
+  new Products('tauntaun');
+  new Products('unicorn');
+  new Products('water-can');
+  new Products('wine-glass');
+}
 
 // ************************** HELPER FUNCTIONS ****************************** //
 function randomizeIndex() {
@@ -84,9 +93,9 @@ function renderImg() {
 
 renderImg();
 
-Products.prototype.getPercentage = function() {
-  this.percentage = (this.clicks / this.views) * 100;
-};
+// Products.prototype.getPercentage = function() {
+//   this.percentage = (this.clicks / this.views) * 100;
+// };
 
 // ************************** CHART ***************************************** //
 function renderChart() {
@@ -136,7 +145,7 @@ function renderChart() {
     }
   };
 
-  let myChart = new Chart(chart, chartObj);
+  new Chart(chart, chartObj);
 }
 
 // ************************** EVENT HANDLERS ******************************** //
@@ -152,6 +161,10 @@ function handleClick(event) {
   if(votes === 0) {
     products.removeEventListener('click', handleClick);
     renderChart();
+
+    let stringifiedProducts = JSON.stringify(productArray);
+    localStorage.setItem('products', stringifiedProducts);
+
     return;
   }
 
