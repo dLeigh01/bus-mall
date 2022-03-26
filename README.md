@@ -32,3 +32,13 @@ Chart.js was surprisingly easy to work with, and the minor change I had to make 
 ### Reflections 03
 
 With the demo to refer back to, this was really easy to get up and running, but it makes a huge difference to be able to see things persisting between page loads!
+
+## Lab 15
+
+### Links and Resources 04
+
+N/A
+
+### Reflections 04
+
+I removed the placeholder logo since it wasn't being used, other than that, I didn't have any bugs or anything I particularly wanted to change... All in all I think I'm happy with this lab.
